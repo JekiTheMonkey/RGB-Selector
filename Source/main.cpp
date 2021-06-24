@@ -98,28 +98,28 @@ int main()
     lineIndicator.setOrigin(lineIndicator.getSize() / 2.f);
     lineIndicator.setPosition(sf::Vector2f(30.f, lineRect.height));
 
-    sf::Vertex palette[4];
-    palette[0].position = sf::Vector2f(75.f, 0.f);
-    palette[0].color = sf::Color::White;
-    palette[1].position = sf::Vector2f(75.f, lineRect.height);
-    palette[1].color = sf::Color::Black;
-    palette[2].position = sf::Vector2f(475.f, lineRect.height);
-    palette[2].color = sf::Color::Black;
-    palette[3].position = sf::Vector2f(475.f, 0.f);
-    palette[3].color = sf::Color::Red;
+    sf::Vertex canvas[4];
+    canvas[0].position = sf::Vector2f(75.f, 0.f);
+    canvas[0].color = sf::Color::White;
+    canvas[1].position = sf::Vector2f(75.f, lineRect.height);
+    canvas[1].color = sf::Color::Black;
+    canvas[2].position = sf::Vector2f(475.f, lineRect.height);
+    canvas[2].color = sf::Color::Black;
+    canvas[3].position = sf::Vector2f(475.f, 0.f);
+    canvas[3].color = sf::Color::Red;
 
-    sf::FloatRect paletteRect(
-        palette[0].position.x, 
-        palette[0].position.y, 
-        palette[2].position.x - palette[0].position.x, 
-        palette[2].position.y - palette[0].position.y);
+    sf::FloatRect canvasRect(
+        canvas[0].position.x, 
+        canvas[0].position.y, 
+        canvas[2].position.x - canvas[0].position.x, 
+        canvas[2].position.y - canvas[0].position.y);
 
     float r = 6.f;
-    sf::CircleShape paletteIndicator(r);
-    paletteIndicator.setFillColor(sf::Color::Transparent);
-    paletteIndicator.setOutlineThickness(3.f);
-    paletteIndicator.setOrigin(sf::Vector2f(r, r));
-    paletteIndicator.setPosition(palette[3].position);
+    sf::CircleShape canvasIndicator(r);
+    canvasIndicator.setFillColor(sf::Color::Transparent);
+    canvasIndicator.setOutlineThickness(3.f);
+    canvasIndicator.setOrigin(sf::Vector2f(r, r));
+    canvasIndicator.setPosition(canvas[3].position);
     sf::Color indicatorColor(sf::Color::Red);
 
     // Mouse position on palette. Default position is top right angle
@@ -147,22 +147,22 @@ int main()
                         lineIndicator.setPosition(sf::Vector2f(
                             lineRect.left + lineRect.width / 2, mousePosition.y));
                         color = line[n].color;
-                        palette[3].color = color;
+                        canvas[3].color = color;
                     }
 
-                    if (paletteRect.contains(sf::Vector2f(mousePosition)))
+                    if (canvasRect.contains(sf::Vector2f(mousePosition)))
                     {
                         normilizedVec = sf::Vector2f(
-                            (mousePosition.x - paletteRect.left) / paletteRect.width, 
-                            (mousePosition.y - paletteRect.top) / paletteRect.height);
-                        paletteIndicator.setPosition(sf::Vector2f(mousePosition));
+                            (mousePosition.x - canvasRect.left) / canvasRect.width, 
+                            (mousePosition.y - canvasRect.top) / canvasRect.height);
+                        canvasIndicator.setPosition(sf::Vector2f(mousePosition));
                     }
 
                     indicatorColor = sf::Color(bilinearInterp(
-                        palette[0].color,
-                        palette[1].color,
-                        palette[2].color,
-                        palette[3].color,
+                        canvas[0].color,
+                        canvas[1].color,
+                        canvas[2].color,
+                        canvas[3].color,
                         normilizedVec));
                     window.setTitle("Selected RGB color: [" +
                         std::to_string(int(indicatorColor.r)) + "," +
@@ -178,8 +178,8 @@ int main()
 
         window.draw(line, lineSize, sf::TriangleStrip);
         window.draw(lineIndicator);
-        window.draw(palette, 4, sf::Quads);
-        window.draw(paletteIndicator);
+        window.draw(canvas, 4, sf::Quads);
+        window.draw(canvasIndicator);
 
         window.display();
     }
